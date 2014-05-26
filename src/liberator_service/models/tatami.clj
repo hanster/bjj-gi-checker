@@ -34,6 +34,8 @@
 
 (mc/find-one db "documents" {})
 (mc/remove db "tatami" {})
+
+;batch insert. Sizes is an array
 (mc/insert-batch db "tatami" [{ :_id "estilio-blue-4.0"
                                 :product_name "Tatami Estilio Blue 4.0"
                                 :proudct_url "http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=Blue-Estilo-4.0"
@@ -42,8 +44,11 @@
                                 :product_name "Tatami Estilio White 4.0"
                                 :proudct_url "http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=White-Estilo-4.0"
                                 :sizes ["A0" "A1"]}])
+
+;use $set so that only that attribute gets updated and the others are left alone
 (mc/update db "tatami" {:_id "estilio-blue-4.0"} {$set {:sizes ["A1"]}})
 
+;returns a single map
 (mc/find-one-as-map db "tatami" {:_id "estilio-blue-4.0"})
 ((mc/find-one-as-map db "tatami" {:product_name "Tatami Estilio Blue 4.0"}) :sizes)
 (mc/find-maps db "tatami" {:product_name "Tatami Estilio Blue 4.0"})

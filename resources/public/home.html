@@ -12,6 +12,10 @@
                     $('#user-list').append($('<li/>', {html: users[user]}));
                 }
 
+                function renderGi(gis) {
+                    $('#gi-list').append($('<div/>', {html: gis}));
+                }
+
                 function getUsers() {
                     $.get("/users", renderUsers);
                 }
@@ -25,6 +29,10 @@
                                     .fail(handleError);
                 }
 
+                function getGiStock() {
+                    $get("/get-gi", renderGi);
+                }
+
 
                 $(function() {getUsers();});
         </script>
@@ -35,5 +43,7 @@
         <ul id="user-list"></ul>
         <input type="text" id="name" placeholder="user name"/>
         <button onclick="addUser()">Add User</button>
+        <div id="gi-list"></div>
+        <button onclick="getGiStock()">Get gi stock</button>
     </body>
 </html>

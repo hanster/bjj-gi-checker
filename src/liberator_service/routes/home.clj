@@ -5,20 +5,10 @@
             [cheshire.core :refer [generate-string]]
             [noir.io :as io]
             [clojure.java.io :refer [file]]
-            [liberator-service.models.tatami :as tatami]
-            [net.cgrand.enlive-html :as html]))
+            [liberator-service.models.tatami :as tatami]))
 
-(def users (atom ["John" "Jane"]))
+(def users (atom ["John" "Jane" "tom"]))
 
-(def tatami-stock (atom {:product "black tatami" :in-stock "none"}))
-
-
-(defn fetch-url
-  "fetch the url and return it as a string"
-  [url]
-  (apply str (html/html-resource (java.net.URL. url))))
-
-(tatami/get-avail-sizes (fetch-url tatami/tatami-estilio-black))
 
 (defresource get-users
   :allowed-methods [:get]
@@ -40,6 +30,12 @@
   :available-media-types["application/json"]
   )
 
+;unfinished
+(defresource get-gi-stock
+  :allowed-methods [:get]
+  :handle-ok (fn [_] (generate-string (tatami/get-all))
+  :available-media-types ["application/json"]))
+
 
 (defresource home
   :available-media-types ["text/html"]
@@ -58,9 +54,9 @@
     (.lastModified (file (str (io/resource-path) "/home.html")))))
 
 
-
 (defroutes home-routes
   (ANY "/" request home)
   (ANY "/add-user" request add-user)
-  (ANY "/users" request get-users))
+  (ANY "/users" request get-users)
+  (ANY "/get-gi" request get-gi-stock))
 

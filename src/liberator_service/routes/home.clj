@@ -33,8 +33,8 @@
 ;unfinished
 (defresource get-gi-stock
   :allowed-methods [:get]
-  :handle-ok (fn [_] (generate-string (tatami/get-all))
-  :available-media-types ["application/json"]))
+  :handle-ok (fn [_] (generate-string (tatami/get-all)))
+  :available-media-types ["application/json"])
 
 
 (defresource home

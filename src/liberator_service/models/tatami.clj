@@ -6,7 +6,6 @@
   (:import org.bson.types.ObjectId))
 
 ;web address for tatami gi
-
 (def tatami-base-url "http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=")
 (def tatami-estilio-black (str tatami-base-url "Black-Estilo-4.0"))
 (def tatami-estilio-white "http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=White-Estilo-4.0")
@@ -24,6 +23,7 @@
   (apply str (html/html-resource (java.net.URL. url))))
 
 
+
 (defn get-avail-sizes
   "get the available sizes for from a tatami webpage "
   [html-source]
@@ -33,6 +33,12 @@
 
 
 (def blue-html (slurp "resources/blue-estilio.html"))
+(def blue-html-resource (html/html-resource (java.net.URL. tatami-estilio-blue)))
+
+(html/select blue-html-resource #{[:font.productnamecolorLARGE :span]})
+(html/text (html/select blue-html-resource #{[:font.productnamecolorLARGE :span]}))
+(-> (html/select blue-html-resource #{[:font.productnamecolorLARGE :span]}) first :content)
+
 (get-avail-sizes blue-html)
 
 (defn update-gi
@@ -50,7 +56,7 @@
 (mc/remove db "tatami" {})
 
 ;batch insert. Sizes is an array
-(mc/insert-batch db "tatami" [{ :_id "estilio-blue-4.0"
+(mc/insert-batch db "tatami" [{ :_id "Blue-Estilo-4.0"
                                 :product_name "Tatami Estilio Blue 4.0"
                                 :product_url "http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=Blue-Estilo-4.0"
                                 :sizes ["A0" "A1"]}
@@ -69,9 +75,6 @@
 (def test-gi-map (update-gi (mc/find-one-as-map db "tatami" {:_id "estilio-blue-4.0"})))
 (update-gi (mc/find-one-as-map db "tatami" {:_id "estilio-blue-4.0"}))
 
-(= (apply concat test-gi-map) ["A3" "A3L"])
- (count test-gi-map)
-(apply concat test-gi-map)
 
 ;(mc/update db "tatami" {:_id "estilio-blue-4.0"} {$set {:sizes test-tatami-get-sizes }})
 

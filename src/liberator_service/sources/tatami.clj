@@ -19,9 +19,10 @@
 (defn get-avail-sizes
   "get the available sizes for from a tatami webpage "
   [html-resource]
-  (->> (apply str html-resource)
-       (re-seq tatami-regex-sizes-js)
-       (mapcat #(re-seq tatami-regex-sizes %))))
+  (->>
+    (clojure.string/join html-resource)
+    (re-seq tatami-regex-sizes-js)
+    (mapcat #(re-seq tatami-regex-sizes %))))
 
 (defn get-product-name
   "get the product name from the html resource"
@@ -36,3 +37,4 @@
     (get-product-name html-resource)
     :sizes
     (get-avail-sizes html-resource)})
+

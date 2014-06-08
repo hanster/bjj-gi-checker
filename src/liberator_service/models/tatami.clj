@@ -35,10 +35,12 @@
 (def blue-html (slurp "resources/blue-estilio.html"))
 (def blue-html-resource (html/html-resource (java.net.URL. tatami-estilio-blue)))
 
+;read in a html file from disk as a html-resource
+(def test-blue-html-resource (html/html-snippet blue-html))
 
 (html/select blue-html-resource #{[:font.productnamecolorLARGE :span]})
 (html/text (html/select blue-html-resource #{[:font.productnamecolorLARGE :span]}))
-(-> (html/select blue-html-resource #{[:font.productnamecolorLARGE :span]}) first :content)
+(-> (html/select test-blue-html-resource #{[:font.productnamecolorLARGE :span]}) first :content)
 
 (get-avail-sizes blue-html)
 
@@ -78,7 +80,7 @@
 ;(update-gi (mc/find-one-as-map db "tatami" {:_id "estilio-blue-4.0"}))
 
 
-;(mc/update db "tatami" {:_id "estilio-blue-4.0"} {$set {:sizes test-tatami-get-sizes }})
+;(mc/update db $"tatami" {:_id "estilio-blue-4.0"} {$set {:sizes test-tatami-get-sizes }})
 
 ;returns a single map
 (mc/find-one-as-map db "tatami" {:_id "estilio-blue-4.0"})

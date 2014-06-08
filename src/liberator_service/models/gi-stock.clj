@@ -6,7 +6,7 @@
 
 
 
-(defn get-map-from-url
+(defn get-map-from-urls
   [url]
   (->> (java.net.URL. url)
        (html/html-resource)
@@ -15,4 +15,12 @@
 
 (defn get-tatami-map
   []
-  (map get-map-from-url tatami/get-all-urls))
+  (map tatami/get-map-from-url tatami/get-all-urls))
+
+(def gi-maps (get-tatami-map))
+
+(get-tatami-map)
+(println gi-maps)
+
+(first tatami/get-all-urls)
+(tatami/get-map-from-url (first tatami/get-all-urls))

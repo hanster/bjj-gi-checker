@@ -28,7 +28,8 @@
   [html-resource]
   (-> (html/select html-resource #{[:font.productnamecolorLARGE :span]})
       first
-      :content))
+      :content
+      first))
 
 (defn get-map
   [html-resource]
@@ -36,3 +37,14 @@
     (get-product-name html-resource)
     :sizes
     (get-avail-sizes html-resource)})
+
+(defn get-map-from-url
+  [url]
+  (let [html-res (html/html-resource (java.net.URL. url))]
+    {:product_name
+     (get-product-name html-res)
+     :sizes
+     (get-avail-sizes html-res)
+     :url
+     (str url)}
+    ))

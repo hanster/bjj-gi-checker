@@ -35,6 +35,7 @@
 (def blue-html (slurp "resources/blue-estilio.html"))
 (def blue-html-resource (html/html-resource (java.net.URL. tatami-estilio-blue)))
 
+
 (html/select blue-html-resource #{[:font.productnamecolorLARGE :span]})
 (html/text (html/select blue-html-resource #{[:font.productnamecolorLARGE :span]}))
 (-> (html/select blue-html-resource #{[:font.productnamecolorLARGE :span]}) first :content)
@@ -51,6 +52,7 @@
 (def conn (mg/connect))
 
 (def db (mg/get-db conn "monger-test"))
+
 
 (mc/find-one db "documents" {})
 (mc/remove db "tatami" {})
@@ -72,8 +74,8 @@
 
 (def test-list '("A0" "A2"))
 ;use $set so that only that attribute gets updated and the others are left alone
-(def test-gi-map (update-gi (mc/find-one-as-map db "tatami" {:_id "estilio-blue-4.0"})))
-(update-gi (mc/find-one-as-map db "tatami" {:_id "estilio-blue-4.0"}))
+;(def test-gi-map (update-gi (mc/find-one-as-map db "tatami" {:_id "estilio-blue-4.0"})))
+;(update-gi (mc/find-one-as-map db "tatami" {:_id "estilio-blue-4.0"}))
 
 
 ;(mc/update db "tatami" {:_id "estilio-blue-4.0"} {$set {:sizes test-tatami-get-sizes }})

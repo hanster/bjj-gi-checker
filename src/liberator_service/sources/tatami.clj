@@ -49,3 +49,12 @@
      :url
      (str url)}
     ))
+
+
+(defn get-map-from-product-code
+  [product-code]
+  (let [url (str tatami-base-url product-code)]
+    (conj
+     (get-map-from-url url)
+     {:product_code (str product-code)})))
+

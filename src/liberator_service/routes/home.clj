@@ -5,7 +5,8 @@
             [cheshire.core :refer [generate-string]]
             [noir.io :as io]
             [clojure.java.io :refer [file]]
-            [liberator-service.models.tatami :as tatami]))
+            [liberator-service.models.tatami :as tatami]
+            [liberator-service.models.gi-stock :as gi-stock]))
 
 (def users (atom ["John" "Jane" "tom"]))
 
@@ -33,7 +34,7 @@
 ;unfinished
 (defresource get-gi-stock
   :allowed-methods [:get]
-  :handle-ok (fn [_] (generate-string (tatami/get-all)))
+  :handle-ok (fn [_] (generate-string (gi-stock/get-tatami-map)))
   :available-media-types ["application/json"])
 
 

@@ -24,3 +24,24 @@ quit
 (use 'liberator-service.repl :reload-all)
 (stop-server)
 quit
+(require '[clojure.java.jdbc :as sql])
+quit
+(require '[clojure.java.jdbc :as sql])
+(sql/db-do-commands "postgresql://localhost:5432/bjjgi_dev"
+(sql/create-table-ddl :testing [:data :text]))
+(load-file "db/repl/-connection.clj")
+(load-file "src/db/repl/-connection.clj")
+q
+quit
+(use '(lobos connectivity core schema))
+(use 'lobos.core)
+(use 'lobos.connectivity)
+(use 'lobos connectivity)
+(use '(lobos connectivity core schema))
+(use 'lobos connectivity)
+(use 'lobos.connectivity)
+clear
+help
+(use 'lobos.connectivity)
+(require 'lobos.connectivity)
+quit

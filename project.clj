@@ -9,7 +9,9 @@
                  [cheshire "5.2.0"]
                  [lib-noir "0.8.3"]
                  [enlive "1.1.5"]
-                 [com.novemberain/monger "2.0.0-rc1"]]
+                 [sicia/lobos "1.0.0-beta2"]
+                 [korma "0.3.3"]
+                 [postgresql "9.3-1101.jdbc4"]]
   :plugins [[lein-ring "0.8.10"]]
   :ring {:handler liberator-service.handler/app
          :init liberator-service.handler/init

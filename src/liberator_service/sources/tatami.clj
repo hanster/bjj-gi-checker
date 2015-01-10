@@ -1,5 +1,7 @@
 (ns liberator-service.sources.tatami
-  (:require [net.cgrand.enlive-html :as html]))
+  (:require [net.cgrand.enlive-html :as html]
+            [schema.core :as s]
+            [liberator-service.models.db :as db]))
 
 (def tatami-base-url "http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=")
 ;the site adds the available sizes using some js. This regex will return the js called
@@ -15,6 +17,10 @@
 
 (def get-all-urls
   (map #(str tatami-base-url %) product-codes))
+
+(defn get-product-codes
+  []
+  (db/get-product-codes-from-brand-name "tatami"))
 
 (defn get-avail-sizes
   "get the available sizes for from a tatami webpage "
@@ -34,27 +40,50 @@
 
 (defn get-map
   [html-resource]
-  {:product_name
-    (get-product-name html-resource)
-    :sizes
-    (get-avail-sizes html-resource)})
+  (let [product-name (get-product-name html-resource)
+        sizes (get-avail-sizes html-resource)]
+    {:product_name product-name
+     :sizes sizes}))
 
 (defn get-map-from-url
   [url]
   (let [html-res (html/html-resource (java.net.URL. url))]
-    {:product_name
-     (get-product-name html-res)
-     :sizes
-     (get-avail-sizes html-res)
-     :url
-     (str url)}
+    (conj
+     (get-map html-res)
+      {:url (str url)})
     ))
 
 
 (defn get-map-from-product-code
   [product-code]
-  (let [url (str tatami-base-url product-code)]
-    (conj
-     (get-map-from-url url)
-     {:product_code (str product-code)})))
+  (let [url (str tatami-base-url product-code)
+        html-res (html/html-resource (java.net.URL. url))
+        product-name (get-product-name html-res)
+        sizes (get-avail-sizes html-res)]
+    {:product_name product-name
+     :sizes        sizes
+     :product_code (str product-code)
+     :url          (str url)}))
+
+
+(defn update-db-product
+  [tatami-item]
+  (let [{:keys [product_code product_name sizes]} tatami-item]
+    (db/update-product product_code product_name (clojure.string/join "," sizes))))
+
+(defn update-db-product-from-code
+  [product-code]
+  (update-db-product (get-map-from-product-code product-code)))
+
+(defn get-products-from-db
+  []
+  (db/get-products-from-brand-name "tatami"))
+
+(def Tatami
+  "The schema for a Tatami product"
+  {:id s/Str
+   :brand_id s/Str
+   :product_code s/Str
+   :product_name s/Str
+   :sizes s/Str})
 

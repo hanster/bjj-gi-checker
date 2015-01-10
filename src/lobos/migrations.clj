@@ -21,6 +21,7 @@
                  (integer :brand_id [:refer :brands :id] :not-null)
                  (varchar :product_code 50)
                  (varchar :product_name 50)
-                 (varchar :available_sizes 50))))
+                 (varchar :available_sizes 50)
+                 (date :last_updated_date))))
   (down [] (drop
             (table :products))))

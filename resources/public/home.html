@@ -4,49 +4,80 @@
         <script type="text/javascript"
                 src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
         </script>
+        <style>
+            table {
+                border: 1px solid #666;
+                width: 100%;
+            }
+            th {
+                background: #f8f8f8;
+                font-weight: bold;
+                padding: 2px;
+            }
+        </style>
 
         <script type="text/javascript">
-                function renderUsers(users) {
-                    $('#user-list').empty();
-                    for(user in users)
-                    $('#user-list').append($('<li/>', {html: users[user]}));
-                }
 
                 function renderGi(gis) {
+                    $('#json-out').empty();
+                    $('#json-out').append(JSON.stringify(gis, undefined, 2));
                     $('#gi-list').empty();
                     for (gi in gis) {
-                        $('#gi-list').append($('<li/>', {html: gis[gi]["product_name"] + " " + gis[gi]["sizes"]}));
+                        $('#gi-list').append($('<li/>', {html: gis[gi]["product_name"]
+                                + " " + gis[gi]["product_code"]
+                                + " " + gis[gi]["available_sizes"]
+                                + " " + gis[gi]["url"]}));
+                    }
+                    alert('Done');
+                }
+
+                function drawTable(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        drawRow(data[i]);
                     }
                 }
 
-                function getUsers() {
-                    $.get("/users", renderUsers);
+                function drawRow(rowData) {
+                    var row = $("<tr />")
+                    $("#giStockTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+                    row.append($("<td>" + rowData.product_code + "</td>"));
+                    row.append($("<td>" + rowData.product_name + "</td>"));
+                    row.append($("<td>" + rowData.available_sizes + "</td>"));
                 }
 
                 function handleError(xhr) {
                     $('#error').text(xhr.statusText + ": " + xhr.responseText);
                 }
 
-                function addUser() {
-                    var jqxhr = $.post("/add-user", {user: $('#name').val()}, renderUsers)
-                                    .fail(handleError);
-                }
-
                 function getGiStock() {
                     $.get("/get-gi", renderGi);
                 }
 
+                function getGiStockFromDb() {
+                    $.get("/get-gi-from-db", drawTable);
+                }
 
-                $(function() {getUsers();});
+                function updateGiStock() {
+                    $.get("/update-gi", function(data) {alert('Done');});
+                }
+
         </script>
-    </head>hello
+    </head>
     <body>
-        <h1>Current Users</h1>
+        <h1>Gi Stock Checker</h1>
+        <button onclick="updateGiStock()">Update gi stock database</button>
+        <button onclick="getGiStock()">Get gi stock direct (slow)</button>
+        <button onclick="getGiStockFromDb()">Get gi stock from db (fast)</button>
+        <table id="giStockTable">
+            <tr>
+                <th>Product Code</th>
+                <th>Product Name</th>
+                <th>Available Sizes</th>
+            </tr>
+
+        </table>
         <p id="error"></p>
-        <ul id="user-list"></ul>
-        <input type="text" id="name" placeholder="user name"/>
-        <button onclick="addUser()">Add User</button>
         <ul id="gi-list"></ul>
-        <button onclick="getGiStock()">Get gi stock</button>
+        <div id="json-out"></div>
     </body>
 </html>

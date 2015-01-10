@@ -18,8 +18,6 @@
   (lm/pending-migrations db-spec sname))
 
 (pending-migrations)
+(migrate)
 
-
- (migrate)
-
- (lobos.core/rollback)
+;(lobos.core/rollback)

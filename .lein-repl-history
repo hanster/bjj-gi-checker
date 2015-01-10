@@ -45,3 +45,7 @@ help
 (use 'lobos.connectivity)
 (require 'lobos.connectivity)
 quit
+(use 'liberator-service.repl)
+quit
+(use 'liberator-service.repl)
+quit

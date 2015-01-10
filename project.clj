@@ -11,7 +11,9 @@
                  [enlive "1.1.5"]
                  [sicia/lobos "1.0.0-beta2"]
                  [korma "0.3.3"]
-                 [postgresql "9.3-1101.jdbc4"]]
+                 [postgresql "9.3-1101.jdbc4"]
+                 [prismatic/schema "0.3.0"]
+                 [clj-time "0.8.0"]]
   :plugins [[lein-ring "0.8.10"]]
   :ring {:handler liberator-service.handler/app
          :init liberator-service.handler/init

@@ -23,6 +23,18 @@
 
 ;;(inital-products-setup)
 
+(defn next-id
+  []
+  (+ 1 (count (select products))))
+
+(defn insert-product-code
+  [brand-id product-code]
+  (insert products (values {:id (next-id) :brand_id brand-id :product_code product-code})))
+
+(defn delete-product-by-id
+  [product-id]
+  (delete products (where {:id product-id})))
+
 (defn- get-brand-id-from-brand-name
   [brand]
   (:id (first (select brands

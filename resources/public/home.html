@@ -14,22 +14,41 @@
                 font-weight: bold;
                 padding: 2px;
             }
+            tr:nth-child(even) {
+                background-color: #F5F5F5;
+            }
         </style>
 
         <script type="text/javascript">
 
                 function drawTable(data) {
-                    $('#json-out').empty();
-                    $('#json-out').append(JSON.stringify(data, undefined, 2));
+                    var jsonOut = $('#json-out');
+                    jsonOut.empty();
+                    jsonOut.append(JSON.stringify(data, undefined, 2));
                     for (var i = 0; i < data.length; i++) {
                         drawRow(data[i]);
                     }
                 }
+                $(someSelector).wrap(function() {
+                    var link = $('<a/>');
+                    link.attr('href', 'somewhere_far_far_away');
+                    link.text($(this).text());
+                    return link;
+                });
+
+                var hrefLink = 'http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=' +rowData.product_code;
+
 
                 function drawRow(rowData) {
-                    var row = $("<tr />")
+                    var row = $("<tr />");
                     $("#giStockTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
-                    row.append($("<td>" + rowData.product_code + "</td>"));
+
+                    var hrefLink = 'http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=' +rowData.product_code;
+                    var link = $('<a/>');
+                    link.attr('href', hrefLink);
+                    link.text(rowData.product_code);
+
+                    row.append($("<td/>").append(link));
                     row.append($("<td>" + rowData.product_name + "</td>"));
                     row.append($("<td>" + rowData.available_sizes + "</td>"));
                     row.append($("<td>" + rowData.last_updated_date + "</td>"));

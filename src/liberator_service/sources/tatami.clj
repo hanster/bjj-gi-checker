@@ -7,7 +7,7 @@
 ;the site adds the available sizes using some js. This regex will return the js called
 (def tatami-regex-sizes-js #"TCN_addContent.*?;")
 ;regex to extract the sizes A{number}{0-2 letters}
-(def tatami-regex-sizes #"A[0-9][A-Za-z]{0,2}")
+(def tatami-regex-sizes #"A[0-9][A-Za-z]{0,2}|F[0-9][A-Za-z]{0,2}|M[0-9]{0,2}")
 (def tatami-regex-product-code #"(?<=ProductCode=).*")
 
 (def tatami-bjj-gi-search "http://www.tatamifightwear.com/SearchResults.asp?searching=Y&sort=13&search=bjj+gi&show=100&page=1")
@@ -23,13 +23,27 @@
   []
   (db/get-product-codes-from-brand-name "tatami"))
 
-(defn get-avail-sizes
+(defn get-avail-sizes-regex-style
   "get the available sizes for from a tatami webpage "
   [html-resource]
   (->>
     (clojure.string/join html-resource)
     (re-seq tatami-regex-sizes-js)
     (mapcat #(re-seq tatami-regex-sizes %))))
+
+(defn get-avail-sizes-option-style
+  [html-resource]
+  (->>
+    (html/select html-resource [:td :> :select :> :option])
+    (mapcat #(:content %))))
+
+(defn get-avail-sizes
+  [html-res]
+  (let [sizes (get-avail-sizes-regex-style html-res)
+        size-count (count sizes)]
+    (if (> size-count 0)
+      (do sizes)
+      (get-avail-sizes-option-style html-res))))
 
 (defn get-product-name
   "get the product name from the html resource"

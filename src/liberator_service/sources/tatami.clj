@@ -8,15 +8,16 @@
 (def tatami-regex-sizes-js #"TCN_addContent.*?;")
 ;regex to extract the sizes A{number}{0-2 letters}
 (def tatami-regex-sizes #"A[0-9][A-Za-z]{0,2}")
+(def tatami-regex-product-code #"(?<=ProductCode=).*")
+
+(def tatami-bjj-gi-search "http://www.tatamifightwear.com/SearchResults.asp?searching=Y&sort=13&search=bjj+gi&show=100&page=1")
+
 (def product-codes
   ["Black-Estilo-4.0"
    "White-Estilo-4.0"
    "Blue-Estilo-4.0"
    "Navy-Estilo-4.0"
    "zerogv3black"])
-
-(def get-all-urls
-  (map #(str tatami-base-url %) product-codes))
 
 (defn get-product-codes
   []
@@ -44,15 +45,6 @@
         sizes (get-avail-sizes html-resource)]
     {:product_name product-name
      :sizes sizes}))
-
-(defn get-map-from-url
-  [url]
-  (let [html-res (html/html-resource (java.net.URL. url))]
-    (conj
-     (get-map html-res)
-      {:url (str url)})
-    ))
-
 
 (defn get-map-from-product-code
   [product-code]
@@ -87,3 +79,8 @@
    :product_name s/Str
    :sizes s/Str})
 
+(defn extract-product-codes
+  [url]
+  (->> (html/select (html/html-resource (java.net.URL. url)) [:tr :> :td :> :a])
+      (map #(:href (:attrs %)))
+      (map #(re-seq tatami-regex-product-code %))))

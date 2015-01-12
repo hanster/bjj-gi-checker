@@ -98,3 +98,7 @@
   (->> (html/select (html/html-resource (java.net.URL. url)) [:tr :> :td :> :a])
       (map #(:href (:attrs %)))
       (map #(re-seq tatami-regex-product-code %))))
+
+(defn update-datetime-to-str
+  [gi-item]
+  (update-in gi-item [:last_updated_date] #(str %)))

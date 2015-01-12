@@ -5,7 +5,8 @@
             [cheshire.core :refer [generate-string]]
             [noir.io :as io]
             [clojure.java.io :refer [file]]
-            [liberator-service.models.gistock :as gistock]))
+            [liberator-service.models.gistock :as gistock]
+            [liberator.representation :as rep]))
 
 (def users (atom ["John" "Jane" "tom"]))
 
@@ -46,6 +47,11 @@
    :handle-ok (fn [_] (generate-string(gistock/update-all-tatami)))
    :available-media-types ["text/html"])
 
+(defresource get-gistock-html-table
+             :allowed-methods [:get]
+             :handle-ok (rep/as-response (gistock/get-all-tatami-from-db) {:representation {:media-type "text/html" :charset "UTF-8"}})
+             :available-media-types ["text/html"])
+
 (defresource home
   :available-media-types ["text/html"]
 
@@ -69,5 +75,6 @@
   (ANY "/users" request get-users)
   (ANY "/get-gi" request get-gistock)
   (ANY "/get-gi-from-db" request get-gistock-from-db)
+  (ANY "/get-gi-table" request get-gistock-html-table)
   (ANY "/update-gi" request update-gistock))
 

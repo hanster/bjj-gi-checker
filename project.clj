@@ -5,7 +5,7 @@
                  [compojure "1.1.6"]
                  [hiccup "1.0.5"]
                  [ring-server "0.3.1"]
-                 [liberator "0.10.0"]
+                 [liberator "0.12.2"]
                  [cheshire "5.2.0"]
                  [lib-noir "0.8.3"]
                  [enlive "1.1.5"]

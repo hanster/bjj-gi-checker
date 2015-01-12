@@ -25,6 +25,17 @@
                     var jsonOut = $('#json-out');
                     jsonOut.empty();
                     jsonOut.append(JSON.stringify(data, undefined, 2));
+
+                    var giStockTable = $('#giStockTable');
+                    var row = $("<tr />");
+                    giStockTable.empty();
+                    giStockTable.append(row);
+
+                    row.append($("<th>Product Code</th>"));
+                    row.append($("<th>Product Name</th>"));
+                    row.append($("<th>Available Sizes</th>"));
+                    row.append($("<th>Last Updated</th>"));
+
                     for (var i = 0; i < data.length; i++) {
                         drawRow(data[i]);
                     }

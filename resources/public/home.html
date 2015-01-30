@@ -1,9 +1,6 @@
 <html>
     <head>
         <title>Liberator Example</title>
-        <script type="text/javascript"
-                src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
-        </script>
         <style>
             table {
                 border: 1px solid #666;
@@ -26,33 +23,19 @@
                     jsonOut.empty();
                     jsonOut.append(JSON.stringify(data, undefined, 2));
 
-                    var giStockTable = $('#giStockTable');
-                    var row = $("<tr />");
-                    giStockTable.empty();
-                    giStockTable.append(row);
-
-                    row.append($("<th>Product Code</th>"));
-                    row.append($("<th>Product Name</th>"));
-                    row.append($("<th>Available Sizes</th>"));
-                    row.append($("<th>Last Updated</th>"));
+                    var giStockTableBody = $('#giStockTableBody');
+                    giStockTableBody.empty();
 
                     for (var i = 0; i < data.length; i++) {
                         drawRow(data[i]);
                     }
+                    $('#giStockTable').DataTable();
                 }
-                $(someSelector).wrap(function() {
-                    var link = $('<a/>');
-                    link.attr('href', 'somewhere_far_far_away');
-                    link.text($(this).text());
-                    return link;
-                });
-
-                var hrefLink = 'http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=' +rowData.product_code;
 
 
                 function drawRow(rowData) {
                     var row = $("<tr />");
-                    $("#giStockTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+                    $("#giStockTableBody").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
 
                     var hrefLink = 'http://www.tatamifightwear.com/ProductDetails.asp?ProductCode=' +rowData.product_code;
                     var link = $('<a/>');
@@ -87,17 +70,33 @@
         <h1>Gi Stock Checker</h1>
         <button onclick="updateGiStock()">Update gi stock database</button>
         <button onclick="getGiStockFromDb()">Get gi stock from db (fast)</button>
-        <table id="giStockTable">
-            <tr>
-                <th>Product Code</th>
-                <th>Product Name</th>
-                <th>Available Sizes</th>
-                <th>Last Updated</th>
-            </tr>
+        <table id="giStockTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Product Code</th>
+                    <th>Product Name</th>
+                    <th>Available Sizes</th>
+                    <th>Last Updated</th>
+                </tr>
+            </thead>
+            <tbody id="giStockTableBody">
+            </tbody>
 
         </table>
         <p id="error"></p>
         <ul id="gi-list"></ul>
         <div id="json-out"></div>
+
+        <!-- ATTENTION \/ -->
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.3/css/jquery.dataTables.min.css">
+        <script src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+        <!-- ATTENTION /\ -->
     </body>
 </html>
